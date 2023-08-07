@@ -35,8 +35,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             continue;
         }
 
+        let mut csv_data: Vec<StringRecord> = Vec::new();
         let mut rdr = ReaderBuilder::new().from_path(in_directory.join(file_name))?;
-        let csv_data: Vec<StringRecord> = rdr.records().filter_map(|row| row.ok()).collect();
+        let records: Vec<StringRecord> = rdr.records().filter_map(|row| row.ok()).collect();
+        csv_data.extend(records);
+        let mut rdr = ReaderBuilder::new().from_path(in_directory.join(file_name))?;
+        let headers_record = rdr.headers()?;
+        let headers: Vec<String> = headers_record
+            .into_iter()
+            .map(|row| row.to_string())
+            .collect();
 
         let mut sql_lines_inner = Vec::new();
         sql_lines_inner.push(format!(
@@ -51,11 +59,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ));
 
         for (idx, data) in csv_data.iter().enumerate() {
-            let lat_index = csv_data[0]
+            let lat_index = headers
                 .iter()
                 .position(|col| col == "lat")
                 .unwrap_or(usize::MAX);
-            let lon_index = csv_data[0]
+            let lon_index = headers
                 .iter()
                 .position(|col| col == "lon")
                 .unwrap_or(usize::MAX);
