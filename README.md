@@ -1,1 +1,1 @@
-# csvgen
+# sqlgen
