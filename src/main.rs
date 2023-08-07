@@ -50,7 +50,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .unwrap_or_default()
         ));
 
-        for (idx, data) in csv_data.iter().enumerate().skip(1) {
+        for (idx, data) in csv_data.iter().enumerate() {
             let lat_index = csv_data[0]
                 .iter()
                 .position(|col| col == "lat")
@@ -72,16 +72,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let cols: Vec<_> = data
                 .iter()
                 .enumerate()
-                .filter_map(|(idx, col)| {
-                    if let Some(column_name) = csv_data[0].get(idx) {
-                        if column_name.starts_with('#') {
-                            return None;
-                        }
-                    }
+                .map(|(_, col)| {
                     if col.is_empty() {
-                        Some("NULL".to_string())
+                        "NULL".to_string()
                     } else {
-                        Some(format!("'{}'", col.replace('\'', "\\'")))
+                        format!("'{}'", col.replace('\'', "\\'"))
                     }
                 })
                 .collect();
