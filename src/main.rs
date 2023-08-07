@@ -35,16 +35,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             continue;
         }
 
-        let mut csv_data: Vec<StringRecord> = Vec::new();
-        let mut rdr = ReaderBuilder::new().from_path(in_directory.join(file_name))?;
-        let records: Vec<StringRecord> = rdr.records().filter_map(|row| row.ok()).collect();
-        csv_data.extend(records);
         let mut rdr = ReaderBuilder::new().from_path(in_directory.join(file_name))?;
         let headers_record = rdr.headers()?;
         let headers: Vec<String> = headers_record
             .into_iter()
             .map(|row| row.to_string())
             .collect();
+
+        let mut csv_data: Vec<StringRecord> = Vec::new();
+        let mut rdr = ReaderBuilder::new().from_path(in_directory.join(file_name))?;
+        let records: Vec<StringRecord> = rdr.records().filter_map(|row| row.ok()).collect();
+        csv_data.extend(records);
 
         let mut sql_lines_inner = Vec::new();
         sql_lines_inner.push(format!(
@@ -67,9 +68,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .iter()
                 .position(|col| col == "lon")
                 .unwrap_or(usize::MAX);
+
             let geom_text = if lat_index != usize::MAX && lon_index != usize::MAX {
                 Some(format!(
-                    "ST_GeomFromText('POINT({} {})', 4326)",
+                    "ST_GeomFromText('POINT({} {})')",
                     data.get(lon_index).unwrap_or("0"),
                     data.get(lat_index).unwrap_or("0")
                 ))
@@ -80,11 +82,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let cols: Vec<_> = data
                 .iter()
                 .enumerate()
-                .map(|(_, col)| {
+                .filter_map(|(col_idx, col)| {
+                    if headers
+                        .get(col_idx)
+                        .unwrap_or(&String::new())
+                        .starts_with('#')
+                    {
+                        return None;
+                    }
+
                     if col.is_empty() {
-                        "NULL".to_string()
+                        Some("NULL".to_string())
                     } else {
-                        format!("'{}'", col.replace('\'', "\\'"))
+                        Some(format!("'{}'", col.replace('\'', "\\'")))
                     }
                 })
                 .collect();
