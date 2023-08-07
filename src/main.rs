@@ -32,12 +32,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         {
             continue;
         }
-        let index: usize = file_name
-            .split("!")
-            .nth(0)
-            .unwrap_or_default()
-            .parse::<usize>()?
-            - 1;
 
         let mut rdr = ReaderBuilder::new().from_path(directory.join(file_name))?;
         let csv_data: Vec<StringRecord> = rdr.records().filter_map(|row| row.ok()).collect();
