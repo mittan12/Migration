@@ -4,8 +4,10 @@ use std::{env, fs};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
-    let directory = Path::new(&args[1]);
-    let entries = fs::read_dir(directory)?;
+    let in_directory = Path::new(&args[1]);
+    let out_path = Path::new(&args[2]);
+
+    let entries = fs::read_dir(in_directory)?;
     let mut file_list: Vec<_> = entries
         .filter_map(|entry| {
             let path = entry.ok()?.path();
@@ -33,7 +35,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             continue;
         }
 
-        let mut rdr = ReaderBuilder::new().from_path(directory.join(file_name))?;
+        let mut rdr = ReaderBuilder::new().from_path(in_directory.join(file_name))?;
         let csv_data: Vec<StringRecord> = rdr.records().filter_map(|row| row.ok()).collect();
 
         let mut sql_lines_inner = Vec::new();
@@ -100,7 +102,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         sql_lines.push(sql_lines_inner.concat());
     }
 
-    fs::write("./tmp.sql", sql_lines.join(";\n"))?;
+    fs::write(out_path, sql_lines.join(";\n"))?;
 
     Ok(())
 }
