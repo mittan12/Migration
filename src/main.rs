@@ -22,10 +22,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     for file_name in &file_list {
         if file_name
-            .split("!")
+            .split('!')
             .nth(1)
             .unwrap_or_default()
-            .split(".")
+            .split('.')
             .nth(1)
             .unwrap_or_default()
             != "csv"
@@ -40,11 +40,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         sql_lines_inner.push(format!(
             "INSERT INTO `{}` VALUES ",
             file_name
-                .split("!")
+                .split('!')
                 .nth(1)
                 .unwrap_or_default()
-                .split(".")
-                .nth(0)
+                .split('.')
+                .next()
                 .unwrap_or_default()
         ));
 
@@ -52,16 +52,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let lat_index = csv_data[0]
                 .iter()
                 .position(|col| col == "lat")
-                .unwrap_or_else(|| usize::MAX);
+                .unwrap_or(usize::MAX);
             let lon_index = csv_data[0]
                 .iter()
                 .position(|col| col == "lon")
-                .unwrap_or_else(|| usize::MAX);
+                .unwrap_or(usize::MAX);
             let geom_text = if lat_index != usize::MAX && lon_index != usize::MAX {
                 Some(format!(
                     "ST_GeomFromText('POINT({} {})', 4326)",
-                    data.get(lon_index).unwrap_or(&"0".to_string()),
-                    data.get(lat_index).unwrap_or(&"0".to_string())
+                    data.get(lon_index).unwrap_or("0"),
+                    data.get(lat_index).unwrap_or("0")
                 ))
             } else {
                 None
@@ -70,19 +70,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let cols: Vec<_> = data
                 .iter()
                 .enumerate()
-                .map(|(idx, col)| {
+                .filter_map(|(idx, col)| {
                     if let Some(column_name) = csv_data[0].get(idx) {
-                        if column_name.starts_with("#") {
+                        if column_name.starts_with('#') {
                             return None;
                         }
                     }
                     if col.is_empty() {
                         Some("NULL".to_string())
                     } else {
-                        Some(format!("'{}'", col.replace("'", "\\'")))
+                        Some(format!("'{}'", col.replace('\'', "\\'")))
                     }
                 })
-                .filter_map(|col| col)
                 .collect();
 
             sql_lines_inner.push(if geom_text.is_some() {
@@ -91,12 +90,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 } else {
                     format!("({},{}),", cols.join(","), geom_text.unwrap())
                 }
+            } else if idx == csv_data.len() - 1 {
+                format!("({})", cols.join(","))
             } else {
-                if idx == csv_data.len() - 1 {
-                    format!("({})", cols.join(","))
-                } else {
-                    format!("({}),", cols.join(","))
-                }
+                format!("({}),", cols.join(","))
             });
         }
 
