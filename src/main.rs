@@ -71,7 +71,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let geom_text = if lat_index != usize::MAX && lon_index != usize::MAX {
                 Some(format!(
-                    "ST_GeomFromText('POINT({} {})')",
+                    "ST_GeomFromText('POINT({} {})', 4326)",
                     data.get(lat_index).unwrap_or("0"),
                     data.get(lon_index).unwrap_or("0")
                 ))
