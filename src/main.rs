@@ -60,25 +60,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ));
 
         for (idx, data) in csv_data.iter().enumerate() {
-            let lat_index = headers
-                .iter()
-                .position(|col| col == "lat")
-                .unwrap_or(usize::MAX);
-            let lon_index = headers
-                .iter()
-                .position(|col| col == "lon")
-                .unwrap_or(usize::MAX);
-
-            let geom_text = if lat_index != usize::MAX && lon_index != usize::MAX {
-                Some(format!(
-                    "ST_GeomFromText('POINT({} {})', 4326)",
-                    data.get(lat_index).unwrap_or("0"),
-                    data.get(lon_index).unwrap_or("0")
-                ))
-            } else {
-                None
-            };
-
             let cols: Vec<_> = data
                 .iter()
                 .enumerate()
@@ -99,13 +80,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 })
                 .collect();
 
-            sql_lines_inner.push(if geom_text.is_some() {
-                if idx == csv_data.len() - 1 {
-                    format!("({},{})", cols.join(","), geom_text.unwrap())
-                } else {
-                    format!("({},{}),", cols.join(","), geom_text.unwrap())
-                }
-            } else if idx == csv_data.len() - 1 {
+            sql_lines_inner.push(if idx == csv_data.len() - 1 {
                 format!("({})", cols.join(","))
             } else {
                 format!("({}),", cols.join(","))
