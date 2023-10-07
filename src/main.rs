@@ -83,7 +83,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .collect();
 
             sql_lines_inner.push(if idx == csv_data.len() - 1 {
-                format!("({})", cols.join(","))
+                format!("({});", cols.join(","))
             } else {
                 format!("({}),", cols.join(","))
             });
