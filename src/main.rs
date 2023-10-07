@@ -22,8 +22,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut sql_lines = Vec::new();
 
-    sql_lines.push("BEGIN".to_string());
-
     for file_name in &file_list {
         if file_name
             .split('!')
@@ -92,7 +90,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         sql_lines.push(sql_lines_inner.concat());
     }
 
-    fs::write(out_path, format!("{};\nCOMMIT;", sql_lines.join(";\n")))?;
+    fs::write(out_path, sql_lines.join(";\n"))?;
 
     Ok(())
 }
