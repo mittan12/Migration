@@ -47,16 +47,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let records: Vec<StringRecord> = rdr.records().filter_map(|row| row.ok()).collect();
         csv_data.extend(records);
 
+        let table_name = file_name
+            .split('!')
+            .nth(1)
+            .unwrap_or_default()
+            .split('.')
+            .next()
+            .unwrap_or_default();
+
         let mut sql_lines_inner = Vec::new();
         sql_lines_inner.push(format!(
-            "INSERT INTO `{}` VALUES ",
-            file_name
-                .split('!')
-                .nth(1)
-                .unwrap_or_default()
-                .split('.')
-                .next()
-                .unwrap_or_default()
+            "LOCK TABLES `{}` WRITE;\nINSERT INTO `{}` VALUES ",
+            table_name, table_name
         ));
 
         for (idx, data) in csv_data.iter().enumerate() {
@@ -87,7 +89,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             });
         }
 
-        sql_lines.push(sql_lines_inner.concat());
+        sql_lines.push(format!("{}\nUNLOCK TABLES;", sql_lines_inner.concat()));
     }
 
     let create_sql: String =
