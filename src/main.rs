@@ -90,7 +90,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         sql_lines.push(sql_lines_inner.concat());
     }
 
-    fs::write(out_path, sql_lines.join(";\n"))?;
+    let create_sql: String =
+        String::from_utf8_lossy(&fs::read(in_directory.join("create_table.sql"))?).parse()?;
+
+    fs::write(
+        out_path,
+        format!(
+            "BEGIN;\n{}\n{};\nCOMMIT;",
+            create_sql,
+            sql_lines.join(";\n")
+        ),
+    )?;
 
     Ok(())
 }
