@@ -89,7 +89,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             });
         }
 
-        sql_lines.push(format!("{}\nUNLOCK TABLES;", sql_lines_inner.concat()));
+        sql_lines.push(format!("{}\nUNLOCK TABLES", sql_lines_inner.concat()));
     }
 
     let create_sql: String =
