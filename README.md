@@ -1,1 +1,1 @@
-# sqlgen
+# migration
