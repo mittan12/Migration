@@ -1,4 +1,3 @@
 /target
-
-# Artifacts
+.env.local
 out.sql

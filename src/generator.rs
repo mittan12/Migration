@@ -1,10 +1,19 @@
-use std::{fs, path::Path};
+use std::{
+    env::{self, VarError},
+    fs,
+    path::Path,
+};
 
 use csv::{ReaderBuilder, StringRecord};
 
-pub fn generate_sql() -> Result<(), Box<dyn std::error::Error>> {
+pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
+    let out_path = match env::var("SQL_OUT_PATH") {
+        Ok(s) => s,
+        Err(env::VarError::NotPresent) => "out.sql".to_string(),
+        Err(VarError::NotUnicode(_)) => panic!("$SQL_OUT_PATH should be written in Unicode."),
+    };
+
     let data_path = Path::new("data");
-    let out_path = Path::new("out.sql");
 
     let entries = fs::read_dir(data_path)?;
     let mut file_list: Vec<_> = entries
@@ -95,13 +104,9 @@ pub fn generate_sql() -> Result<(), Box<dyn std::error::Error>> {
         String::from_utf8_lossy(&fs::read(data_path.join("create_table.sql"))?).parse()?;
 
     fs::write(
-        out_path,
-        format!(
-            "BEGIN;\n{}\n{};\nCOMMIT;",
-            create_sql,
-            sql_lines.join(";\n")
-        ),
+        out_path.clone(),
+        format!("{}{};", create_sql, sql_lines.join(";")),
     )?;
 
-    Ok(())
+    Ok(out_path)
 }
