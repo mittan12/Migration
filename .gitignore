@@ -1,4 +1,4 @@
 /target
 
 # Artifacts
-tmp.sql
+out.sql
