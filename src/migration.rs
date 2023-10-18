@@ -13,7 +13,7 @@ pub fn insert_data(generated_sql_path: String) -> Result<(), Box<dyn std::error:
         .arg(format!("-S{}", env::var("MYSQL_SOCKET").unwrap()))
         .arg(env::var("MYSQL_DATABASE").unwrap())
         .stdin(Stdio::from(generated_sql_file))
-        .spawn()
+        .output()
         .expect("failed to import generated sql file");
 
     Ok(())
