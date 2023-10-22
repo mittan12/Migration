@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "mittan12",
+      "name": "mittan12",
+      "avatar_url": "https://avatars.githubusercontent.com/u/147319703?v=4",
+      "profile": "https://github.com/mittan12",
+      "contributions": [
+        "data"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "Migration",
+  "projectOwner": "TrainLCD"
+}
