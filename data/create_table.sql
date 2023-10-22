@@ -196,6 +196,7 @@ CREATE TABLE `types` (
   `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `direction` int unsigned NOT NULL DEFAULT '0',
   `kind` int unsigned NOT NULL DEFAULT '0',
+  `top_priority` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `type_cd` (`type_cd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
