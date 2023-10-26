@@ -20,7 +20,7 @@ pub fn insert_data(generated_sql_path: String) -> Result<(), Box<dyn std::error:
         .arg("--default-character-set=utf8mb4")
         .arg(env::var("MYSQL_DATABASE").unwrap())
         .stdin(Stdio::from(generated_sql_file))
-        .output()
+        .spawn()
         .expect("failed to import generated sql file");
 
     let cache_client = memcache::connect(memcached_url).unwrap();
