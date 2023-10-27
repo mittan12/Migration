@@ -479,7 +479,7 @@ line_cd,company_cd,line_name,line_name_k,line_name_h,line_name_r,line_name_zh,li
 99503,170,岳南鉄道線,ガクナンテツドウセン,岳南鉄道線,Gakunan Railway Line,,,#6B0102,2,GD,,,,,,,,,0,99503
 99504,171,静岡鉄道静岡清水線,シズオカテツドウシズオカシミズセン,静岡鉄道静岡清水線,Shizuoka Railway Shizuoka Shimizu Line,,,#0063B5,2,S,,,,,,,,,0,99504
 99505,172,天竜浜名湖線,テンリュウハマナコセン,天竜浜名湖鉄道天竜浜名湖線,Tenryu Hamanako Line,,,#95805A,2,,,,,,,,,,0,99505
-99506,173,遠州鉄道鉄道線,エンシュウテツドウテツドウセン,遠州鉄道鉄道線,Enshu Railway Line,,,#0672B0,2,,,,,,,,,,0,99506
+99506,173,遠州鉄道鉄道線,エンシュウテツドウテツドウセン,遠州鉄道鉄道線,Enshu Railway Line,,,#0672B0,2,ET,,,,,,REVERSED_SQUARE,,,0,99506
 99507,174,大井川鐵道大井川本線,オオイガワテツドウオオイガワホンセン,大井川鐵道大井川本線,Oigawa Railway Oigawa Main Line,,,#F5F5F5,2,,,,,,,,,,0,99507
 99508,174,南アルプスあぷとライン,ミナミアルプスアプトライン,大井川鐵道井川線,Oigawa Railway Ikawa Line,,,#FFFFCC,2,,,,,,,,,,0,99508
 99509,175,あおなみ線,アオナミセン,西名古屋港線,Aonami Line,,,#464285,2,AN,,,#464285,,,ROUND,,,0,99509

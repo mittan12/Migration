@@ -170,10 +170,6 @@ CREATE TABLE `stations` (
   PRIMARY KEY (`station_cd`),
   KEY `line_cd` (`line_cd`),
   KEY `station_g_cd` (`station_g_cd`),
-  KEY `e_status` (`e_status`),
-  KEY `e_sort` (`e_sort`),
-  KEY `station_g_cd_and_e_status` (`station_g_cd`,`e_status`),
-  KEY `station_cd` (`station_cd`,`line_cd`,`e_status`),
   CONSTRAINT `stations_ibfk_1` FOREIGN KEY (`line_cd`) REFERENCES `lines` (`line_cd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -211,4 +207,4 @@ CREATE TABLE `types` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-06  9:53:34
+-- Dump completed on 2023-10-26 19:51:45
