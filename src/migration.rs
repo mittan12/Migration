@@ -21,7 +21,7 @@ pub fn insert_data(generated_sql_path: String) -> Result<(), Box<dyn std::error:
         .arg(env::var("MYSQL_DATABASE").unwrap())
         .stdin(Stdio::from(generated_sql_file))
         .spawn()
-        .expect("failed to import generated sql file");
+        .unwrap();
 
     let cache_client = memcache::connect(memcached_url).unwrap();
     cache_client.flush().unwrap();
