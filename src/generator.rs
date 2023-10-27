@@ -9,7 +9,7 @@ use csv::{ReaderBuilder, StringRecord};
 pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
     let out_path = match env::var("SQL_OUT_PATH") {
         Ok(s) => s,
-        Err(env::VarError::NotPresent) => "out.sql".to_string(),
+        Err(VarError::NotPresent) => "out.sql".to_string(),
         Err(VarError::NotUnicode(_)) => panic!("$SQL_OUT_PATH should be written in Unicode."),
     };
     let out_full_path = format!("{}/{}", env::var("PWD")?, out_path);
