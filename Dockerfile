@@ -11,6 +11,5 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 COPY . .
 COPY --from=builder /app/target/release/migration /usr/local/bin/migration
-RUN ls
 
 CMD ["migration"]
