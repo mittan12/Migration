@@ -7,6 +7,9 @@ use std::{
 pub fn insert_data(generated_sql_path: String) -> Result<(), Box<dyn std::error::Error>> {
     let generated_sql_file = File::open(generated_sql_path)?;
     let memcached_url = env::var("MEMCACHED_URL")?;
+    let disable_memcached_flush: bool = env::var("DISABLE_MEMCACHED_FLUSH")?
+        .parse()
+        .unwrap_or(false);
 
     let mut child = Command::new("mysql")
         .arg(format!("-u{}", env::var("MYSQL_USER").unwrap()))
@@ -19,8 +22,10 @@ pub fn insert_data(generated_sql_path: String) -> Result<(), Box<dyn std::error:
     let exit_status = child.wait()?;
     println!("{}", exit_status);
 
-    let cache_client = memcache::connect(memcached_url)?;
-    cache_client.flush()?;
+    if !disable_memcached_flush {
+        let cache_client = memcache::connect(memcached_url)?;
+        cache_client.flush()?;
+    }
 
     Ok(())
 }

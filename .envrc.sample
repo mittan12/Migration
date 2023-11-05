@@ -4,3 +4,4 @@ export MYSQL_SOCKET=
 export MYSQL_DATABASE=
 export MEMCACHED_URL=memcache://127.0.0.1:11211
 export SQL_OUT_PATH=out.sql
+export DISABLE_MEMCACHED_FLUSH=false
