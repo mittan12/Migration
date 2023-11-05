@@ -167,7 +167,7 @@ CREATE TABLE `stations` (
   `close_ymd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `e_status` int unsigned NOT NULL,
   `e_sort` int unsigned NOT NULL,
-  `location` geometry NOT NULL,
+  `location` geometry NOT NULL SRID 4326,
   PRIMARY KEY (`station_cd`),
   KEY `line_cd` (`line_cd`),
   KEY `station_g_cd` (`station_g_cd`),

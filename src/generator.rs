@@ -71,8 +71,8 @@ pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
         ));
 
         for (idx, data) in csv_data.iter().enumerate() {
-            let mut lon = 0.0;
             let mut lat = 0.0;
+            let mut lon = 0.0;
 
             let cols: Vec<_> = data
                 .iter()
@@ -106,20 +106,20 @@ pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
             sql_lines_inner.push(if idx == csv_data.len() - 1 {
                 if table_name == "stations" {
                     format!(
-                        "({}, ST_GeomFromText('POINT({} {})'));",
+                        "({}, ST_GeomFromText('POINT({} {})', 4326));",
                         cols.join(","),
-                        lon,
-                        lat
+                        lat,
+                        lon
                     )
                 } else {
                     format!("({});", cols.join(","))
                 }
             } else if table_name == "stations" {
                 format!(
-                    "({}, ST_GeomFromText('POINT({} {})')),",
+                    "({}, ST_GeomFromText('POINT({} {})', 4326)),",
                     cols.join(","),
-                    lon,
-                    lat
+                    lat,
+                    lon
                 )
             } else {
                 format!("({}),", cols.join(","))
