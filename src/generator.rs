@@ -71,6 +71,9 @@ pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
         ));
 
         for (idx, data) in csv_data.iter().enumerate() {
+            let mut lat = 0.0;
+            let mut lon = 0.0;
+
             let cols: Vec<_> = data
                 .iter()
                 .enumerate()
@@ -83,6 +86,15 @@ pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
                         return None;
                     }
 
+                    if table_name == "stations" {
+                        if headers.get(col_idx).unwrap_or(&String::new()) == "lon" {
+                            lon = col.parse().unwrap_or_default();
+                        }
+                        if headers.get(col_idx).unwrap_or(&String::new()) == "lat" {
+                            lat = col.parse().unwrap_or_default();
+                        }
+                    }
+
                     if col.is_empty() {
                         Some("NULL".to_string())
                     } else {
@@ -92,7 +104,23 @@ pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
                 .collect();
 
             sql_lines_inner.push(if idx == csv_data.len() - 1 {
-                format!("({});", cols.join(","))
+                if table_name == "stations" {
+                    format!(
+                        "({}, ST_GeomFromText('POINT({} {})', 0));",
+                        cols.join(","),
+                        lat,
+                        lon
+                    )
+                } else {
+                    format!("({});", cols.join(","))
+                }
+            } else if table_name == "stations" {
+                format!(
+                    "({}, ST_GeomFromText('POINT({} {})', 0)),",
+                    cols.join(","),
+                    lat,
+                    lon
+                )
             } else {
                 format!("({}),", cols.join(","))
             });

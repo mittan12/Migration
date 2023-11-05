@@ -167,9 +167,11 @@ CREATE TABLE `stations` (
   `close_ymd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `e_status` int unsigned NOT NULL,
   `e_sort` int unsigned NOT NULL,
+  `location` geometry NOT NULL SRID 0,
   PRIMARY KEY (`station_cd`),
   KEY `line_cd` (`line_cd`),
   KEY `station_g_cd` (`station_g_cd`),
+  SPATIAL KEY `location` (`location`),
   CONSTRAINT `stations_ibfk_1` FOREIGN KEY (`line_cd`) REFERENCES `lines` (`line_cd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
