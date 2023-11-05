@@ -106,7 +106,7 @@ pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
             sql_lines_inner.push(if idx == csv_data.len() - 1 {
                 if table_name == "stations" {
                     format!(
-                        "({}, ST_GeomFromText('POINT({} {})', 4326));",
+                        "({}, ST_GeomFromText('POINT({} {})', 0));",
                         cols.join(","),
                         lat,
                         lon
@@ -116,7 +116,7 @@ pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
                 }
             } else if table_name == "stations" {
                 format!(
-                    "({}, ST_GeomFromText('POINT({} {})', 4326)),",
+                    "({}, ST_GeomFromText('POINT({} {})', 0)),",
                     cols.join(","),
                     lat,
                     lon
