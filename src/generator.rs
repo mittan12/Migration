@@ -114,17 +114,15 @@ pub fn generate_sql() -> Result<String, Box<dyn std::error::Error>> {
                 } else {
                     format!("({});", cols.join(","))
                 }
+            } else if table_name == "stations" {
+                format!(
+                    "({}, ST_GeomFromText('POINT({} {})')),",
+                    cols.join(","),
+                    lon,
+                    lat
+                )
             } else {
-                if table_name == "stations" {
-                    format!(
-                        "({}, ST_GeomFromText('POINT({} {})')),",
-                        cols.join(","),
-                        lon,
-                        lat
-                    )
-                } else {
-                    format!("({}),", cols.join(","))
-                }
+                format!("({}),", cols.join(","))
             });
         }
 
