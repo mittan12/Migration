@@ -73,7 +73,6 @@ id,type_cd,type_name,type_name_k,type_name_r,type_name_zh,type_name_ko,color,dir
 0,152,普通,フツウ,Local,慢车,보통,#1F63C6,1,0,0,上り系統,PARTIAL
 0,153,普通,フツウ,Local,慢车,보통,#1F63C6,2,0,0,下り系統,PARTIAL
 0,154,快速,カイソク,Rapid,快车,쾌속,#DC143C,0,2,1,自動選択用,COMPLETE
-0,155,ワンマン,ワンマン,Conductorless,无导体,무도체,#1F63C6,0,0,1,,COMPLETE
 0,200,踊り子(池袋〜伊豆急下田),オドリコ,Odoriko(Ikebukuro to Izukyū-shimoda),踊子,무희,#035D67,0,4,0,,COMPLETE
 0,201,踊り子(東京〜伊豆急下田),オドリコ,Odoriko(Tokyo to Izukyū-shimoda),踊子,무희,#035D67,0,4,0,,COMPLETE
 0,202,踊り子(池袋〜修善寺),オドリコ,Odoriko(Ikebukuro to Shuzenji),踊子,무희,#035D67,0,4,0,,COMPLETE
